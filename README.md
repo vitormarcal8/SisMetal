@@ -1,5 +1,5 @@
 # SisMetal
-Sistema Web de Pedidos de Fabricação  de Peças para Metálurgica.
+Sistema Web de Pedidos de Fabricação  de Peças para Metálurgica. - Em desenvolvimento
 
 Tecnologias usadas:
 
