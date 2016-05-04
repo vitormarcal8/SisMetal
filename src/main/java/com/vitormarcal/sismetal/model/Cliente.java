@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Cliente implements Pessoa, Serializable {
@@ -34,7 +35,7 @@ public class Cliente implements Pessoa, Serializable {
 		this.id = id;
 	}
 
-	@NotNull
+	@NotNull @NotBlank
 	@Column(length = 100, nullable = false)
 	public String getNome() {
 		return nome;
@@ -69,7 +70,7 @@ public class Cliente implements Pessoa, Serializable {
 		this.tipoPessoa = tipoPessoa;
 	}
 
-	@NotNull
+	@NotNull @NotBlank
 	@Column(name = "doc_receita_federal", length = 14, nullable = false, unique = true)
 	public String getDocumentoReceitaFederal() {
 		return documentoReceitaFederal;

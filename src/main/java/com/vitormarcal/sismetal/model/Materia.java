@@ -18,17 +18,29 @@ public class Materia implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+	private String codigo;
 	private String nome;
 	private Integer quantidadeEstoque;
 	private BigDecimal valorUnitario;
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@NotNull
+	@Column(length = 80, nullable = false, unique = true)
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	@NotNull
@@ -41,7 +53,9 @@ public class Materia implements Serializable {
 		this.nome = nome;
 	}
 
-	@NotNull @Min(0) @Max(value = 9999, message = " Valor muito alto.")
+	@NotNull
+	@Min(0)
+	@Max(value = 9999, message = " Valor muito alto.")
 	@Column(nullable = false, length = 5, name = "quantidade_estoque")
 	public Integer getQuantidadeEstoque() {
 		return quantidadeEstoque;
