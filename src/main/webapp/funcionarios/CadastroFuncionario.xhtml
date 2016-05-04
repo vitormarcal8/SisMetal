@@ -6,10 +6,11 @@
 	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
 	<ui:define name="titulo">#{cadastroFuncionarioBean.editando ? 'Edição de Funcionario' : 'Novo Funcionario'}</ui:define>
-	
+
 	<ui:define name="corpo">
 		<f:metadata>
-			<o:viewParam name="funcionario" value="#{cadastroFuncionarioBean.funcionario}" />
+			<o:viewParam name="funcionario"
+				value="#{cadastroFuncionarioBean.funcionario}" />
 
 		</f:metadata>
 
