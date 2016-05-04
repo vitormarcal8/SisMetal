@@ -55,7 +55,7 @@ public class FuncionarioRepository implements Serializable {
 			criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
 		}
 		if (StringUtils.isNotBlank(filtro.getDocumentoReceitaFederal())) {
-			criteria.add(Restrictions.ilike("documentoReceitaFederal", filtro.getDocumentoReceitaFederal()));
+			criteria.add(Restrictions.eq("documentoReceitaFederal", filtro.getDocumentoReceitaFederal()));
 		}
 		
 		return criteria.addOrder(Order.asc("nome")).list();
