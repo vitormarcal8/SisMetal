@@ -5,14 +5,18 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:o="http://omnifaces.org/ui" xmlns:p="http://primefaces.org/ui">
 
+<ui:define name="titulo">#{cadastroClienteBean.editando ? 'Edição de Cliente' : 'Novo Cliente'}</ui:define>
+
 	<ui:define name="corpo">
 		<f:metadata>
 			<o:viewParam name="cliente" value="#{cadastroClienteBean.cliente}" />
 
 		</f:metadata>
 
-
 		<h:form>
+			<h1>#{cadastroClienteBean.editando ? 'Edição de Cliente'
+				: 'Novo Cliente'}</h1>
+
 			<p:messages autoUpdate="true" closable="true" />
 
 			<p:toolbar style="margin-top: 20px">
@@ -22,7 +26,7 @@
 						action="#{cadastroClienteBean.salvar}" update="@form" />
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
-					<p:button value="Pesquisa" />
+					<p:button value="Pesquisa" outcome="/clientes/PesquisaClientes"/>
 				</p:toolbarGroup>
 			</p:toolbar>
 			<p:panelGrid columns="2" id="painel"
