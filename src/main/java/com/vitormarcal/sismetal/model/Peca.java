@@ -2,19 +2,24 @@ package com.vitormarcal.sismetal.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 
 @Entity
 public class Peca implements Serializable {
@@ -26,8 +31,11 @@ public class Peca implements Serializable {
 	private BigDecimal peso;
 	private BigDecimal tamanho;
 	private Integer quantidade;
-	private Collection<Materia> materias;
-	private BigDecimal valorDeCusto;
+	private BigDecimal valorTotal = BigDecimal.ZERO;
+	private List<ItemPeca> itens = new ArrayList<>();
+	private StatusPeca status = StatusPeca.ORCAMENTO;
+	public Peca() {
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -81,25 +89,36 @@ public class Peca implements Serializable {
 		this.quantidade = quantidade;
 	}
 
-	@ManyToMany
-	@JoinTable(name = "lista_materias_peca", joinColumns = @JoinColumn(name = "idPeca") , inverseJoinColumns = @JoinColumn(name = "idMateria") )
-	public Collection<Materia> getMaterias() {
-		return materias;
+	@OneToMany(mappedBy = "peca", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	public List<ItemPeca> getItens() {
+		return itens;
 	}
 
-	public void setMaterias(Collection<Materia> materias) {
-		this.materias = materias;
+	public void setItens(List<ItemPeca> itens) {
+		this.itens = itens;
 	}
 
 	@NotNull
 	@Min(1)
 	@Column(name = "valor_custo", scale = 2, precision = 10, nullable = false)
-	public BigDecimal getValorDeCusto() {
-		return valorDeCusto;
+	public BigDecimal getValorTotal() {
+		return valorTotal;
 	}
 
-	public void setValorDeCusto(BigDecimal valorDeCusto) {
-		this.valorDeCusto = valorDeCusto;
+	public void setValorTotal(BigDecimal valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+	
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 20)
+	public StatusPeca getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusPeca status) {
+		this.status = status;
 	}
 
 	@Override
@@ -126,5 +145,101 @@ public class Peca implements Serializable {
 			return false;
 		return true;
 	}
+
+	public void adicionarItemVazio() {
+		Materia materia = new Materia();
+
+		ItemPeca item = new ItemPeca();
+		item.setMateria(materia);
+		item.setPeca(this);
+
+		this.getItens().add(0, item);
+	}
+
+	public void removerItemVazio() {
+		ItemPeca primeiroItem = this.getItens().get(0);
+
+		if (primeiroItem != null && primeiroItem.getMateria().getId() == null) {
+			this.getItens().remove(0);
+		}
+	}
+
+	public void recalcularValorTotal() {
+		BigDecimal total = BigDecimal.ZERO;
+		
+		
+		for (ItemPeca item : this.getItens()) {
+			if (item.getMateria() != null && item.getMateria().getId() != null) {
+				total = total.add(item.getValorTotal());
+			}
+		}
+		this.setValorTotal(total);
+	}
+
+	@Transient
+	public boolean isOrcamento() {
+		return StatusPeca.ORCAMENTO.equals(this.getStatus());
+	}
+
+	@Transient
+	public boolean isNovo() {
+		return getId() == null;
+	}
+	
+	@Transient
+	public boolean isExistente() {
+		return !isNovo();
+	}
+
+	@Transient
+	public boolean isValorTotalNegativo() {
+		return this.getValorTotal().compareTo(BigDecimal.ZERO) < 0;
+	}
+
+	@Transient
+	public boolean isEmitido() {
+		return StatusPeca.EMITIDO.equals(this.getStatus());
+	}
+
+	@Transient
+	public boolean isNaoEmissivel() {
+		return !this.isEmissivel();
+	}
+
+	@Transient
+	public boolean isEmissivel() {
+		return this.isExistente() && this.isOrcamento();
+	}
+
+	@Transient
+	public boolean isCancelavel() {
+		return this.isExistente() && !this.isCancelado();
+	}
+
+	@Transient
+	private boolean isCancelado() {
+		return StatusPeca.CANCELADO.equals(this.getStatus());
+	}
+
+	@Transient
+	public boolean isNaoCancelavel() {
+		return !this.isCancelavel();
+	}
+
+	@Transient
+	public boolean isAlteravel() {
+		return this.isOrcamento();
+	}
+	
+	@Transient
+	public boolean isNaoAlteravel() {
+		return !this.isAlteravel();
+	}
+	
+	@Transient
+	public boolean isNaoEnviavelPorEmail() {
+		return this.isNovo() || this.isCancelado();
+	}
+
 
 }

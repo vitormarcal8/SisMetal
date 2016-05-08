@@ -12,13 +12,13 @@ import com.vitormarcal.sismetal.util.cdi.CDIServiceLocator;
 @FacesConverter(forClass = Materia.class)
 public class MateriaConverter implements Converter {
 
-	//@Inject
+	// @Inject
 	private MateriaRepository repository;
-	
+
 	public MateriaConverter() {
 		this.repository = CDIServiceLocator.getBean(MateriaRepository.class);
 	}
-	
+
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		Materia retorno = null;

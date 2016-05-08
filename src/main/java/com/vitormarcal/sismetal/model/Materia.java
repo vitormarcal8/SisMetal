@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.vitormarcal.sismetal.service.NegocioException;
 
 @Entity
 public class Materia implements Serializable {
@@ -44,6 +47,7 @@ public class Materia implements Serializable {
 	}
 
 	@NotNull
+	@Size(max = 80)
 	@Column(length = 80, nullable = false, unique = true)
 	public String getNome() {
 		return nome;
@@ -100,4 +104,19 @@ public class Materia implements Serializable {
 		return true;
 	}
 
+	
+	public void baixarEstoque(Integer quantidade) {
+		int novaQuantidade = this.getQuantidadeEstoque() - quantidade;
+		
+		if(novaQuantidade < 0 ){
+			throw new NegocioException("Não há disponibilidade no estoque de " 
+					+ quantidade + " itens do produto " + this.getCodigo() + ".");
+		}
+		setQuantidadeEstoque(novaQuantidade);
+		
+	}
+
+	public void adicionarEstoque(Integer quantidade) {
+		this.setQuantidadeEstoque(getQuantidadeEstoque() + quantidade);
+	}
 }

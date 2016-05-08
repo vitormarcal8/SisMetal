@@ -1,0 +1,75 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Pesquisa de Pecas</ui:define>
+
+	<ui:define name="corpo">
+		<h:form id="frmPesquisa">
+			<h1>Pesquisa de Pecas</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisar"
+						action="#{pesquisaPecasBean.pesquisar()}" update="@form" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Novo" outcome="/pecas/CadastroPeca" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="painel"
+				style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+				<p:outputLabel value="Id" for="idUsuario" />
+				<p:inputText id="idUsuario" size="10"
+					value="#{pesquisaPecasBean.filtro.id}" />
+
+				<p:outputLabel value="Nome" for="nome" />
+				<p:inputText id="codigo" value="#{pesquisaPecasBean.filtro.codigo}"
+					size="60" />
+
+				<p:outputLabel value="Nome" for="nome" />
+				<p:inputText id="nome" value="#{pesquisaPecasBean.filtro.nome}"
+					size="60" />
+
+
+			</p:panelGrid>
+
+			<p:dataTable id="pecasTable"
+				value="#{pesquisaPecasBean.pecasFiltrados}" var="peca"
+				style="margin-top: 20px" emptyMessage="Nenhum peca encontrado."
+				rows="20" paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Id" style="text-align: center; width: 100px">
+					<h:outputText value="#{peca.id}" />
+				</p:column>
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{peca.nome}" />
+				</p:column>
+
+				<p:column headerText="Codigo">
+					<h:outputText value="#{peca.codigo}" />
+				</p:column>
+
+				<p:column style="width: 100px; text-align: center">
+					<p:button outcome="/pecas/CadastroPeca" icon="ui-icon-pencil"
+						title="Editar">
+						<f:param name="peca" value="#{peca.id}" />
+					</p:button>
+				</p:column>
+			</p:dataTable>
+
+			
+		</h:form>
+
+	</ui:define>
+
+
+</ui:composition>

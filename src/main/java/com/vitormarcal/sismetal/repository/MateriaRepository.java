@@ -54,6 +54,17 @@ public class MateriaRepository implements Serializable {
 			return null;
 		}
 	}
+	
+	public List<Materia> buscaNomes(String nome) {
+		try {
+			return manager.createQuery("from Materia where upper(nome) like :nome", Materia.class)
+					.setParameter("nome", "%"+nome.toUpperCase() + "%").getResultList();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Materia> filtrados(MateriaFilter filtro) {
@@ -71,6 +82,11 @@ public class MateriaRepository implements Serializable {
 		}
 		
 		return criteria.addOrder(Order.asc("nome")).list();
+	}
+
+	public Materia porCodigo(String codigo) {
+		return manager.createQuery("from Materia where upper(codigo) like :codigo", Materia.class)
+				.setParameter("codigo", codigo.toUpperCase()).getSingleResult();
 	}
 
 }
