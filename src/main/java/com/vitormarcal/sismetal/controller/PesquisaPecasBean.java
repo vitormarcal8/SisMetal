@@ -10,7 +10,7 @@ import javax.inject.Named;
 import com.vitormarcal.sismetal.model.Peca;
 import com.vitormarcal.sismetal.repository.PecaRepository;
 import com.vitormarcal.sismetal.repository.filter.PecaFilter;
-import com.vitormarcal.sismetal.util.jsf.FacesUtil;
+
 
 @Named
 @ViewScoped

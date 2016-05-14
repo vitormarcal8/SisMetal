@@ -6,17 +6,20 @@
 	xmlns:p="http://primefaces.org/ui">
 
 
-	<ui:define name="titulo">Pesquisa de Materias-Prima</ui:define>
 
-	<ui:define name="corpo">
+	<ui:define name="content">
+
+
+
 		<h:form id="frmPesquisa">
-			<h1>Pesquisa de Matérias-Prima</h1>
+			<h1 class="aw-page-title">Pesquisa de Materias-Prima</h1>
 
 			<p:messages autoUpdate="true" closable="true" />
 
 			<p:toolbar style="margin-top: 20px">
 				<p:toolbarGroup>
-					<p:commandButton value="Pesquisar" action="#{pesquisaMateriasBean.pesquisar()}" update="@form" />
+					<p:commandButton value="Pesquisar"
+						action="#{pesquisaMateriasBean.pesquisar()}" update="@form" />
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
 					<p:button value="Novo" outcome="/materias/CadastroMateriaPrima" />
@@ -60,7 +63,9 @@
 					<h:outputText value="#{materia.quantidadeEstoque}" />
 				</p:column>
 				<p:column headerText="Valor Unitário">
-					<h:outputText value="#{materia.valorUnitario}" />
+					<h:outputText value="#{materia.valorUnitario}">
+						<f:convertNumber type="currency" />
+					</h:outputText>
 				</p:column>
 
 				<p:column style="width: 100px; text-align: center">

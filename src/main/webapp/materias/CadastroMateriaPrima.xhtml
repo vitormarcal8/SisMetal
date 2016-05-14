@@ -5,16 +5,15 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
-	<ui:define name="titulo">#{cadastroMateriaBean.editando ? 'Edição de Materia-Prima' : 'Nova Materia-Prima'}</ui:define>
 
-	<ui:define name="corpo">
+	<ui:define name="content">
 
 		<f:metadata>
 			<o:viewParam name="materia" value="#{cadastroMateriaBean.materia}" />
 		</f:metadata>
 
 		<h:form>
-			<h1>#{cadastroMateriaBean.editando ? 'Edição de Materia-Prima' :
+			<h1 class="aw-page-title">#{cadastroMateriaBean.editando ? 'Edição de Materia-Prima' :
 				'Nova Materia-Prima'}</h1>
 
 			<p:messages autoUpdate="true" closable="true" />
@@ -46,9 +45,11 @@
 					value="#{cadastroMateriaBean.materia.quantidadeEstoque}"
 					id="estoque" />
 
-				<p:outputLabel value="Valor Unitário" for="valor" />
-				<p:inputText value="#{cadastroMateriaBean.materia.valorUnitario}"
-					id="valor" />
+				<p:outputLabel value="Valor unitário" for="valorUnitario"/>
+	    		<p:inputText id="valorUnitario" size="10" maxlength="10" styleClass="moeda"
+	    			value="#{cadastroMateriaBean.materia.valorUnitario}">
+	    			<f:convertNumber maxFractionDigits="2" minFractionDigits="2" />
+	    		</p:inputText>
 			</p:panelGrid>
 
 		</h:form>

@@ -43,7 +43,6 @@ public class CadastroPecaBean implements Serializable {
 
 	public void inicializar() {
 		if (FacesUtil.isNotPostback()) {
-
 			this.peca.adicionarItemVazio();
 
 			this.recalcularPeca();
